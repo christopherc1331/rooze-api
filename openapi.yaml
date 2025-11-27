@@ -1,0 +1,18 @@
+openapi: 3.0.0
+info:
+  title: Rooze API
+  version: '1.0'
+servers: []
+tags: []
+paths:
+  /health:
+    get:
+      responses:
+        '200':
+          description: ''
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                type: string
+components:
+  schemas: {}

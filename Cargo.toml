@@ -1,0 +1,13 @@
+[package]
+name = "rooze-api"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+poem = "3.1.12"
+poem-openapi = "5.1.16"
+tokio = { version = "1.47.2", features = ["macros", "rt-multi-thread"] }
+dotenv = "0.15.0"
+
+[workspace.lints.clippy]
+unwrap_used = "deny"
