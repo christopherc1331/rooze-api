@@ -33,7 +33,7 @@ pub struct Model {
     pub long: Option<f32>,
     pub is_person: Option<i64>,
     #[sea_orm(column_name = "_id", column_type = "Text", nullable, unique)]
-    pub id: Option<String>,
+    pub source_id: Option<String>,
     pub is_scraped: Option<i64>,
     pub created_at: Option<DateTime>,
     pub updated_at: Option<DateTime>,

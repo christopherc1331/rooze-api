@@ -6,7 +6,8 @@ use sea_orm::entity::prelude::*;
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel)]
 #[sea_orm(table_name = "cities")]
 pub struct Model {
-    pub id: Option<i64>,
+    #[sea_orm(primary_key)]
+    pub id: i64,
     #[sea_orm(column_type = "Text", nullable)]
     pub state_code: Option<String>,
     #[sea_orm(column_type = "Text", nullable)]
