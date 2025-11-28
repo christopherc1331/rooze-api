@@ -14,5 +14,33 @@ paths:
             text/plain; charset=utf-8:
               schema:
                 type: string
+  /styles/popular:
+    get:
+      parameters:
+      - name: limit
+        schema:
+          type: integer
+          format: uint64
+        in: query
+        required: false
+        deprecated: false
+        explode: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Style'
 components:
-  schemas: {}
+  schemas:
+    Style:
+      type: object
+      title: Style
+      required:
+      - name
+      properties:
+        name:
+          type: string

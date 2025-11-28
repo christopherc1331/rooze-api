@@ -1,9 +1,9 @@
 use poem_openapi::{OpenApi, payload::PlainText};
 
-pub struct Api;
+pub struct HealthApi;
 
 #[OpenApi]
-impl Api {
+impl HealthApi {
     #[oai(path = "/health", method = "get")]
     async fn health(&self) -> PlainText<&'static str> {
         PlainText("Ok")

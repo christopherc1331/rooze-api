@@ -7,11 +7,14 @@ use poem_openapi::OpenApiService;
 use sea_orm::{Database, DatabaseConnection};
 
 mod api;
+mod entity;
+mod repository;
+mod service;
 mod util;
 
 #[tokio::main]
 async fn main() {
-    let api_service = OpenApiService::new(api::Api, "Rooze API", "1.0");
+    let api_service = OpenApiService::new((api::HealthApi, api::StylesApi), "Rooze API", "1.0");
     let yaml = api_service.spec_yaml();
     fs::write("openapi.yaml", &yaml).expect("Unable to write OpenAPI spec to file");
 
