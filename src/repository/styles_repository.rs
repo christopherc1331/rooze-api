@@ -1,4 +1,8 @@
-use sea_orm::DatabaseConnection;
+use std::vec;
+
+use sea_orm::{DatabaseConnection, sea_query::Query};
+
+use crate::entity::styles;
 
 pub struct StylesRepository {
     db: DatabaseConnection,
@@ -10,6 +14,6 @@ impl StylesRepository {
     }
 
     pub fn get_popular_styles(&self, limit: Option<usize>) -> Vec<String> {
-        todo!("Implement database query to fetch popular styles")
+        let stmt = Query::select().columns(vec![]).from(styles::Entity);
     }
 }
