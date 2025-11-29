@@ -20,9 +20,9 @@ paths:
       - name: limit
         schema:
           type: integer
-          format: uint64
+          format: int64
         in: query
-        required: false
+        required: true
         deprecated: false
         explode: true
       responses:
@@ -33,14 +33,28 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Style'
+                  $ref: '#/components/schemas/PopularStyle'
+        '500':
+          description: ''
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                type: string
 components:
   schemas:
-    Style:
+    PopularStyle:
       type: object
-      title: Style
+      title: PopularStyle
       required:
+      - count
+      - id
       - name
       properties:
+        count:
+          type: integer
+          format: int64
+        id:
+          type: integer
+          format: int64
         name:
           type: string

@@ -1738,6 +1738,7 @@ dependencies = [
  "poem",
  "poem-openapi",
  "sea-orm",
+ "thiserror",
  "tokio",
 ]
 

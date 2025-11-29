@@ -10,6 +10,7 @@ use crate::api::{StylesApi, builder::ApiModule};
 
 mod api;
 mod entity;
+mod error;
 mod repository;
 mod service;
 mod util;
