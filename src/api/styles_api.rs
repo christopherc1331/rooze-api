@@ -1,7 +1,7 @@
 use crate::{
     api::builder::ApiModule,
     error::ErrorResponse,
-    repository::styles_repository::{PopularStyle, StylesRepository},
+    repository::styles::{styles_repository::StylesRepository, styles_types::StyleWithCount},
     service::styles_service::StylesService,
 };
 use poem_openapi::{OpenApi, param::Query, payload::Json};
@@ -26,7 +26,7 @@ impl StylesApi {
     async fn get_popular_styles(
         &self,
         limit: Query<i64>,
-    ) -> Result<Json<Vec<PopularStyle>>, ErrorResponse> {
+    ) -> Result<Json<Vec<StyleWithCount>>, ErrorResponse> {
         let styles = self
             .service
             .get_popular_styles(limit.0)

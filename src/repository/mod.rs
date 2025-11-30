@@ -1,1 +1,1 @@
-pub mod styles_repository;
+pub mod styles;
