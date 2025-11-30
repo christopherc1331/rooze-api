@@ -1,40 +1,20 @@
-use sea_orm::{DatabaseBackend::Postgres, DatabaseConnection, DbErr, FromQueryResult, Statement};
+use sea_orm::{DatabaseConnection, DbErr, FromQueryResult, Statement};
 
-use crate::repository::{
-    map::types::GeoBoundary,
-    styles::types::{StyleTypeWithCount, StyleWithCount},
-};
+use crate::repository::map::types::{GeoBoundary, MapState};
 
-pub struct StylesRepository {
+pub struct MapRepository {
     db: DatabaseConnection,
 }
 
-impl StylesRepository {
+impl MapRepository {
     pub fn new(db: DatabaseConnection) -> Self {
         Self { db }
     }
 
-    pub async fn get_popular_styles(&self, limit: i64) -> Result<Vec<StyleWithCount>, DbErr> {
-        StyleWithCount::find_by_statement(Statement::from_sql_and_values(
-            Postgres,
-            r#"
-                    SELECT COUNT(s.name), s.id, s.name
-                    FROM artists_images_styles ais
-                    INNER JOIN styles s ON ais.style_id = s.id
-                    GROUP BY s.name, s.id
-                    ORDER BY COUNT(s.name) DESC
-                    LIMIT $1
-                "#,
-            [limit.into()],
-        ))
-        .all(&self.db)
-        .await
-    }
-
-    pub async fn get_styles_with_bounds(
+    pub async fn get_map_state_for_bounds(
         &self,
         boundary: GeoBoundary,
-    ) -> Result<Vec<StyleTypeWithCount>, DbErr> {
+    ) -> Result<Option<MapState>, DbErr> {
         let GeoBoundary {
             south_west_lat,
             north_east_lat,
@@ -42,8 +22,8 @@ impl StylesRepository {
             north_east_long,
         } = boundary;
 
-        StyleTypeWithCount::find_by_statement(Statement::from_sql_and_values(
-            Postgres,
+        MapState::find_by_statement(Statement::from_sql_and_values(
+            sea_orm::DatabaseBackend::Postgres,
             r#"
                 ;WITH artists_in_bounds AS (
                     SELECT a.id
@@ -71,7 +51,7 @@ impl StylesRepository {
                 north_east_long.into(),
             ],
         ))
-        .all(&self.db)
+        .one(&self.db)
         .await
     }
 }

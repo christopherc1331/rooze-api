@@ -15,10 +15,3 @@ pub struct StyleTypeWithCount {
     pub count: i64,
     pub style_type: String,
 }
-
-pub struct GeoBoundary {
-    pub north_east_lat: f64,
-    pub north_east_long: f64,
-    pub south_west_lat: f64,
-    pub south_west_long: f64,
-}

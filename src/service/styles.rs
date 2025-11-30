@@ -18,7 +18,7 @@ impl StylesService {
 
     pub async fn get_styles_with_bounds(
         &self,
-        boundary: crate::repository::styles::types::GeoBoundary,
+        boundary: crate::repository::map::types::GeoBoundary,
     ) -> Result<Vec<crate::repository::styles::types::StyleTypeWithCount>, AppError> {
         Ok(self.repo.get_styles_with_bounds(boundary).await?)
     }

@@ -21,7 +21,9 @@ pub struct AppState {
 
 fn build_app(state: Arc<AppState>) -> Route {
     let styles_api = StylesApi::new(state.clone());
-    let api_service = OpenApiService::new((api::HealthApi, styles_api), "Rooze API", "1.0");
+    let map_api = api::MapApi::new(state.clone());
+    let api_service =
+        OpenApiService::new((api::HealthApi, styles_api, map_api), "Rooze API", "1.0");
     let yaml = api_service.spec_yaml();
     fs::write("openapi.yaml", &yaml).expect("Unable to write OpenAPI spec to file");
 
