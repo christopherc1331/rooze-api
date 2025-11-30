@@ -33,7 +33,57 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/PopularStyle'
+                  $ref: '#/components/schemas/StyleWithCount'
+        '500':
+          description: ''
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                type: string
+  /styles/by_bounds:
+    get:
+      parameters:
+      - name: south_west_lat
+        schema:
+          type: number
+          format: double
+        in: query
+        required: true
+        deprecated: false
+        explode: true
+      - name: north_east_lat
+        schema:
+          type: number
+          format: double
+        in: query
+        required: true
+        deprecated: false
+        explode: true
+      - name: south_west_long
+        schema:
+          type: number
+          format: double
+        in: query
+        required: true
+        deprecated: false
+        explode: true
+      - name: north_east_long
+        schema:
+          type: number
+          format: double
+        in: query
+        required: true
+        deprecated: false
+        explode: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StyleTypeWithCount'
         '500':
           description: ''
           content:
@@ -42,19 +92,38 @@ paths:
                 type: string
 components:
   schemas:
-    PopularStyle:
+    StyleTypeWithCount:
       type: object
-      title: PopularStyle
+      title: StyleTypeWithCount
       required:
-      - count
       - id
       - name
+      - count
+      - style_type
       properties:
-        count:
-          type: integer
-          format: int64
         id:
           type: integer
           format: int64
         name:
           type: string
+        count:
+          type: integer
+          format: int64
+        style_type:
+          type: string
+    StyleWithCount:
+      type: object
+      title: StyleWithCount
+      required:
+      - id
+      - name
+      - count
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        count:
+          type: integer
+          format: int64

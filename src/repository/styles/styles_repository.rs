@@ -1,6 +1,6 @@
 use sea_orm::{DatabaseBackend::Postgres, DatabaseConnection, DbErr, FromQueryResult, Statement};
 
-use crate::repository::styles::styles_types::{StyleTypeWithCount, StyleWithCount};
+use crate::repository::styles::styles_types::{GeoBoundary, StyleTypeWithCount, StyleWithCount};
 
 pub struct StylesRepository {
     db: DatabaseConnection,
@@ -28,7 +28,17 @@ impl StylesRepository {
         .await
     }
 
-    pub async fn get_styles_with_bounds(&self) -> Resullt<Vec<StyleTypeWithCount>> {
+    pub async fn get_styles_with_bounds(
+        &self,
+        boundary: GeoBoundary,
+    ) -> Result<Vec<StyleTypeWithCount>, DbErr> {
+        let GeoBoundary {
+            south_west_lat,
+            north_east_lat,
+            south_west_long,
+            north_east_long,
+        } = boundary;
+
         StyleTypeWithCount::find_by_statement(Statement::from_sql_and_values(
             Postgres,
             r#"
@@ -43,7 +53,7 @@ impl StylesRepository {
                     s.id,
                     s.name,
                     s.type as style_type,
-                    COUNT(s.id) as style_count
+                    COUNT(s.id) as count
                 FROM artists_images_styles ais
                 INNER JOIN artists_images ai ON ai.id = ais.artists_images_id
                 INNER JOIN artists_in_bounds aib ON aib.id = ai.artist_id
@@ -51,7 +61,14 @@ impl StylesRepository {
                 GROUP BY s.id, s.name, s.type
                 ORDER BY s.type, s.name
             "#,
-            [],
+            [
+                south_west_lat.into(),
+                north_east_lat.into(),
+                south_west_long.into(),
+                north_east_long.into(),
+            ],
         ))
+        .all(&self.db)
+        .await
     }
 }

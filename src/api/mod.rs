@@ -1,4 +1,3 @@
-pub mod builder;
 mod health;
 mod styles_api;
 
