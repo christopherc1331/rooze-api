@@ -1,6 +1,6 @@
 use sea_orm::{DatabaseBackend::Postgres, DatabaseConnection, DbErr, FromQueryResult, Statement};
 
-use crate::repository::styles::styles_types::{GeoBoundary, StyleTypeWithCount, StyleWithCount};
+use crate::repository::styles::types::{GeoBoundary, StyleTypeWithCount, StyleWithCount};
 
 pub struct StylesRepository {
     db: DatabaseConnection,

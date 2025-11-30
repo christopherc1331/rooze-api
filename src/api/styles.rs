@@ -1,9 +1,10 @@
+use poem_openapi::{OpenApi, param::Query, payload::Json};
+
 use crate::{
     error::ErrorResponse,
-    repository::styles::{styles_repository::StylesRepository, styles_types::StyleWithCount},
-    service::styles_service::StylesService,
+    repository::styles::{StylesRepository, types::StyleWithCount},
+    service::StylesService,
 };
-use poem_openapi::{OpenApi, param::Query, payload::Json};
 
 pub struct StylesApi {
     service: StylesService,
@@ -37,9 +38,9 @@ impl StylesApi {
         north_east_lat: Query<f64>,
         south_west_long: Query<f64>,
         north_east_long: Query<f64>,
-    ) -> Result<Json<Vec<crate::repository::styles::styles_types::StyleTypeWithCount>>, ErrorResponse>
+    ) -> Result<Json<Vec<crate::repository::styles::types::StyleTypeWithCount>>, ErrorResponse>
     {
-        let boundary = crate::repository::styles::styles_types::GeoBoundary {
+        let boundary = crate::repository::styles::types::GeoBoundary {
             south_west_lat: south_west_lat.0,
             north_east_lat: north_east_lat.0,
             south_west_long: south_west_long.0,

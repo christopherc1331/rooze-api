@@ -1,5 +1,5 @@
 mod health;
-mod styles_api;
+mod styles;
 
 pub use health::HealthApi;
-pub use styles_api::StylesApi;
+pub use styles::StylesApi;

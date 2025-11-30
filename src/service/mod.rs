@@ -1,1 +1,3 @@
-pub mod styles_service;
+mod styles;
+
+pub use styles::StylesService;

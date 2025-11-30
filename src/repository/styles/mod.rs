@@ -1,2 +1,4 @@
-pub mod styles_repository;
-pub mod styles_types;
+mod repository;
+pub mod types;
+
+pub use repository::StylesRepository;
