@@ -22,6 +22,7 @@ impl MapRepository {
             north_east_long,
         } = boundary;
 
+        // TODO: update query to return single row with stats
         MapState::find_by_statement(Statement::from_sql_and_values(
             sea_orm::DatabaseBackend::Postgres,
             r#"
