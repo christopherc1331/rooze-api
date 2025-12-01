@@ -1,6 +1,6 @@
 use sea_orm::{DatabaseConnection, DbErr, FromQueryResult, Statement};
 
-use crate::repository::map::types::{GeoBoundary, MapState};
+use crate::repository::map::types::{City, GeoBoundary, LocationWithDetails, MapState, PostalCodeResult, State};
 
 pub struct MapRepository {
     db: DatabaseConnection,
@@ -51,5 +51,30 @@ impl MapRepository {
         ))
         .one(&self.db)
         .await
+    }
+
+    pub async fn get_cities(&self, _state: String) -> Result<Vec<City>, DbErr> {
+        todo!()
+    }
+
+    pub async fn get_states(&self) -> Result<Vec<State>, DbErr> {
+        todo!()
+    }
+
+    pub async fn get_locations_with_details(
+        &self,
+        _boundary: GeoBoundary,
+        _style_ids: Option<Vec<i64>>,
+        _states: Option<Vec<String>>,
+        _cities: Option<Vec<String>>,
+    ) -> Result<Vec<LocationWithDetails>, DbErr> {
+        todo!()
+    }
+
+    pub async fn search_by_postal_code(
+        &self,
+        _postal_code: String,
+    ) -> Result<Option<PostalCodeResult>, DbErr> {
+        todo!()
     }
 }

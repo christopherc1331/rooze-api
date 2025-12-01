@@ -74,4 +74,18 @@ impl StylesRepository {
         .all(&self.db)
         .await
     }
+
+    pub async fn get_all_styles_with_counts(
+        &self,
+        _selected_style_ids: Option<Vec<i64>>,
+    ) -> Result<Vec<StyleTypeWithCount>, DbErr> {
+        todo!()
+    }
+
+    pub async fn get_filtered_styles_with_counts(
+        &self,
+        _selected_style_ids: Option<Vec<i64>>,
+    ) -> Result<Vec<StyleTypeWithCount>, DbErr> {
+        todo!()
+    }
 }

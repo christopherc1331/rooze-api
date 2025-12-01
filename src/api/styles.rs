@@ -53,4 +53,44 @@ impl StylesApi {
             .map_err(ErrorResponse::from)?;
         Ok(Json(styles))
     }
+
+    /// Get all styles with artist counts, grouped by type
+    #[oai(path = "/all", method = "get")]
+    async fn get_all_styles(
+        &self,
+        style_ids: Query<Option<String>>,
+    ) -> Result<Json<Vec<crate::repository::styles::types::StyleTypeWithCount>>, ErrorResponse>
+    {
+        let style_ids_parsed = style_ids.0.map(|s| {
+            s.split(',')
+                .filter_map(|id| id.trim().parse::<i64>().ok())
+                .collect()
+        });
+        let styles = self
+            .service
+            .get_all_styles_with_counts(style_ids_parsed)
+            .await
+            .map_err(ErrorResponse::from)?;
+        Ok(Json(styles))
+    }
+
+    /// Get styles that co-occur with selected styles (for filtering)
+    #[oai(path = "/filtered", method = "get")]
+    async fn get_filtered_styles(
+        &self,
+        style_ids: Query<Option<String>>,
+    ) -> Result<Json<Vec<crate::repository::styles::types::StyleTypeWithCount>>, ErrorResponse>
+    {
+        let style_ids_parsed = style_ids.0.map(|s| {
+            s.split(',')
+                .filter_map(|id| id.trim().parse::<i64>().ok())
+                .collect()
+        });
+        let styles = self
+            .service
+            .get_filtered_styles_with_counts(style_ids_parsed)
+            .await
+            .map_err(ErrorResponse::from)?;
+        Ok(Json(styles))
+    }
 }
