@@ -1,10 +1,14 @@
-use poem_openapi::{param::{Path, Query}, payload::Json, OpenApi};
+use poem_openapi::{
+    OpenApi,
+    param::{Path, Query},
+    payload::Json,
+};
 
 use crate::{
     error::ErrorResponse,
     repository::map::{
-        types::{City, LocationWithDetails, MapState, PostalCodeResult, State},
         MapRepository,
+        types::{City, LocationWithDetails, MapState, PostalCodeResult, State},
     },
     service::MapService,
 };

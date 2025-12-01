@@ -1,14 +1,14 @@
 use poem_openapi::{
+    OpenApi,
     param::{Header, Path, Query},
     payload::Json,
-    OpenApi,
 };
 
 use crate::{
     error::ErrorResponse,
     repository::artist::{
-        types::{ArtistStyle, ArtistWithDetails, PaginatedArtistImages},
         ArtistRepository,
+        types::{ArtistStyle, ArtistWithDetails, PaginatedArtistImages},
     },
     service::ArtistService,
 };
@@ -75,7 +75,10 @@ impl ArtistApi {
                 .collect()
         });
         // TODO: Extract user_id from token
-        let user_id = token.0.as_ref().map(|_| todo!("extract user_id from token"));
+        let user_id = token
+            .0
+            .as_ref()
+            .map(|_| todo!("extract user_id from token"));
         let images = self
             .service
             .get_artist_images_paginated(

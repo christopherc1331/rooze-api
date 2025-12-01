@@ -1,6 +1,8 @@
 use sea_orm::{DatabaseConnection, DbErr, FromQueryResult, Statement};
 
-use crate::repository::map::types::{City, GeoBoundary, LocationWithDetails, MapState, PostalCodeResult, State};
+use crate::repository::map::types::{
+    City, GeoBoundary, LocationWithDetails, MapState, PostalCodeResult, State,
+};
 
 pub struct MapRepository {
     db: DatabaseConnection,

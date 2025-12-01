@@ -1,14 +1,14 @@
 use poem_openapi::{
+    OpenApi,
     param::{Header, Query},
     payload::Json,
-    OpenApi,
 };
 
 use crate::{
     error::ErrorResponse,
     repository::posts::{
-        types::{PaginatedPosts, PostsCount},
         PostsRepository,
+        types::{PaginatedPosts, PostsCount},
     },
     service::PostsService,
 };
@@ -89,7 +89,10 @@ impl PostsApi {
                 .collect()
         });
         // TODO: Extract user_id from token
-        let user_id = token.0.as_ref().map(|_| todo!("extract user_id from token"));
+        let user_id = token
+            .0
+            .as_ref()
+            .map(|_| todo!("extract user_id from token"));
         let posts = self
             .service
             .get_posts_by_style(

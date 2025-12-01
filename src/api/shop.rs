@@ -1,14 +1,14 @@
 use poem_openapi::{
+    OpenApi,
     param::{Header, Path, Query},
     payload::Json,
-    OpenApi,
 };
 
 use crate::{
     error::ErrorResponse,
     repository::shop::{
-        types::{PaginatedShopImages, ShopStyle, ShopWithDetails},
         ShopRepository,
+        types::{PaginatedShopImages, ShopStyle, ShopWithDetails},
     },
     service::ShopService,
 };
@@ -33,7 +33,10 @@ impl ShopApi {
         #[oai(name = "Authorization")] token: Header<Option<String>>,
     ) -> Result<Json<Option<ShopWithDetails>>, ErrorResponse> {
         // TODO: Extract user_id from token
-        let user_id = token.0.as_ref().map(|_| todo!("extract user_id from token"));
+        let user_id = token
+            .0
+            .as_ref()
+            .map(|_| todo!("extract user_id from token"));
         let shop = self
             .service
             .get_shop(id.0, user_id)
@@ -78,7 +81,10 @@ impl ShopApi {
                 .collect()
         });
         // TODO: Extract user_id from token
-        let user_id = token.0.as_ref().map(|_| todo!("extract user_id from token"));
+        let user_id = token
+            .0
+            .as_ref()
+            .map(|_| todo!("extract user_id from token"));
         let images = self
             .service
             .get_shop_images_paginated(
