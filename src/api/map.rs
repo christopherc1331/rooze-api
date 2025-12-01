@@ -18,7 +18,7 @@ impl MapApi {
         Self { service }
     }
 
-    #[oai(path = "/popular", method = "get")]
+    #[oai(path = "/", method = "get")]
     async fn get_map_state_for_bounds(
         &self,
         south_west_lat: Query<f64>,

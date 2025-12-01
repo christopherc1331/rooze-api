@@ -90,8 +90,73 @@ paths:
             text/plain; charset=utf-8:
               schema:
                 type: string
+  /map:
+    get:
+      parameters:
+      - name: south_west_lat
+        schema:
+          type: number
+          format: double
+        in: query
+        required: true
+        deprecated: false
+        explode: true
+      - name: north_east_lat
+        schema:
+          type: number
+          format: double
+        in: query
+        required: true
+        deprecated: false
+        explode: true
+      - name: south_west_long
+        schema:
+          type: number
+          format: double
+        in: query
+        required: true
+        deprecated: false
+        explode: true
+      - name: north_east_long
+        schema:
+          type: number
+          format: double
+        in: query
+        required: true
+        deprecated: false
+        explode: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/MapState'
+        '500':
+          description: ''
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                type: string
 components:
   schemas:
+    MapState:
+      type: object
+      title: MapState
+      required:
+      - shop_count
+      - artist_count
+      - style_count
+      properties:
+        shop_count:
+          type: integer
+          format: int64
+        artist_count:
+          type: integer
+          format: int64
+        style_count:
+          type: integer
+          format: int64
     StyleTypeWithCount:
       type: object
       title: StyleTypeWithCount

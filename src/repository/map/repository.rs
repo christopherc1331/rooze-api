@@ -22,28 +22,25 @@ impl MapRepository {
             north_east_long,
         } = boundary;
 
-        // TODO: update query to return single row with stats
         MapState::find_by_statement(Statement::from_sql_and_values(
             sea_orm::DatabaseBackend::Postgres,
             r#"
                 ;WITH artists_in_bounds AS (
-                    SELECT a.id
+                    SELECT
+                        a.id artist_id,
+                        a.location_id
                     FROM artists a
                     INNER JOIN locations l ON a.location_id = l.id
                     WHERE l.lat BETWEEN $1 AND $2
                     AND l.long BETWEEN $3 AND $4
                 )
                 SELECT
-                    s.id,
-                    s.name,
-                    s.type as style_type,
-                    COUNT(s.id) as count
-                FROM artists_images_styles ais
-                INNER JOIN artists_images ai ON ai.id = ais.artists_images_id
-                INNER JOIN artists_in_bounds aib ON aib.id = ai.artist_id
-                INNER JOIN styles s ON ais.style_id = s.id
-                GROUP BY s.id, s.name, s.type
-                ORDER BY s.type, s.name
+                    COUNT(DISTINCT aib.location_id) shop_count,
+                    COUNT(DISTINCT aib.artist_id) artist_count,
+                    COUNT(DISTINCT ais.style_id) style_count
+                FROM artists_in_bounds aib
+                LEFT JOIN artists_images ai ON ai.artist_id = aib.artist_id
+                LEFT JOIN artists_images_styles ais ON ai.id = ais.artists_images_id
             "#,
             [
                 south_west_lat.into(),
