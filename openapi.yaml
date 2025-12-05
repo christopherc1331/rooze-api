@@ -90,6 +90,56 @@ paths:
             text/plain; charset=utf-8:
               schema:
                 type: string
+  /styles/all:
+    get:
+      parameters:
+      - name: style_ids
+        schema:
+          type: string
+        in: query
+        required: false
+        deprecated: false
+        explode: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StyleTypeWithCount'
+        '500':
+          description: ''
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                type: string
+  /styles/filtered:
+    get:
+      parameters:
+      - name: style_ids
+        schema:
+          type: string
+        in: query
+        required: false
+        deprecated: false
+        explode: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StyleTypeWithCount'
+        '500':
+          description: ''
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                type: string
   /map:
     get:
       parameters:
@@ -125,13 +175,482 @@ paths:
         required: true
         deprecated: false
         explode: true
+      - name: style_ids
+        schema:
+          type: string
+        in: query
+        required: false
+        deprecated: false
+        explode: true
       responses:
         '200':
           description: ''
           content:
             application/json; charset=utf-8:
               schema:
-                $ref: '#/components/schemas/MapState'
+                $ref: '#/components/schemas/MapInfo'
+        '500':
+          description: ''
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                type: string
+  /map/cities:
+    get:
+      parameters:
+      - name: state
+        schema:
+          type: string
+        in: query
+        required: true
+        deprecated: false
+        explode: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/City'
+        '500':
+          description: ''
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                type: string
+  /map/states:
+    get:
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/State'
+        '500':
+          description: ''
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                type: string
+  /map/locations:
+    get:
+      parameters:
+      - name: south_west_lat
+        schema:
+          type: number
+          format: double
+        in: query
+        required: true
+        deprecated: false
+        explode: true
+      - name: north_east_lat
+        schema:
+          type: number
+          format: double
+        in: query
+        required: true
+        deprecated: false
+        explode: true
+      - name: south_west_long
+        schema:
+          type: number
+          format: double
+        in: query
+        required: true
+        deprecated: false
+        explode: true
+      - name: north_east_long
+        schema:
+          type: number
+          format: double
+        in: query
+        required: true
+        deprecated: false
+        explode: true
+      - name: style_ids
+        schema:
+          type: string
+        in: query
+        required: false
+        deprecated: false
+        explode: true
+      - name: states
+        schema:
+          type: string
+        in: query
+        required: false
+        deprecated: false
+        explode: true
+      - name: cities
+        schema:
+          type: string
+        in: query
+        required: false
+        deprecated: false
+        explode: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LocationWithDetails'
+        '500':
+          description: ''
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                type: string
+  /map/postal_code/{code}:
+    get:
+      parameters:
+      - name: code
+        schema:
+          type: string
+        in: path
+        required: true
+        deprecated: false
+        explode: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/PostalCodeResult'
+        '500':
+          description: ''
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                type: string
+  /shops/{id}:
+    get:
+      parameters:
+      - name: id
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+        deprecated: false
+        explode: true
+      - name: Authorization
+        schema:
+          type: string
+        in: header
+        required: false
+        deprecated: false
+        explode: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/ShopWithDetails'
+        '500':
+          description: ''
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                type: string
+  /shops/{id}/styles:
+    get:
+      parameters:
+      - name: id
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+        deprecated: false
+        explode: true
+      - name: style_ids
+        schema:
+          type: string
+        in: query
+        required: false
+        deprecated: false
+        explode: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ShopStyle'
+        '500':
+          description: ''
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                type: string
+  /shops/{id}/images:
+    get:
+      parameters:
+      - name: id
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+        deprecated: false
+        explode: true
+      - name: style_ids
+        schema:
+          type: string
+        in: query
+        required: false
+        deprecated: false
+        explode: true
+      - name: page
+        schema:
+          type: integer
+          format: int32
+        in: query
+        required: false
+        deprecated: false
+        explode: true
+      - name: per_page
+        schema:
+          type: integer
+          format: int32
+        in: query
+        required: false
+        deprecated: false
+        explode: true
+      - name: Authorization
+        schema:
+          type: string
+        in: header
+        required: false
+        deprecated: false
+        explode: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/PaginatedShopImages'
+        '500':
+          description: ''
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                type: string
+  /artists/{id}:
+    get:
+      parameters:
+      - name: id
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+        deprecated: false
+        explode: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/ArtistWithDetails'
+        '500':
+          description: ''
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                type: string
+  /artists/{id}/styles:
+    get:
+      parameters:
+      - name: id
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+        deprecated: false
+        explode: true
+      - name: style_ids
+        schema:
+          type: string
+        in: query
+        required: false
+        deprecated: false
+        explode: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArtistStyle'
+        '500':
+          description: ''
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                type: string
+  /artists/{id}/images:
+    get:
+      parameters:
+      - name: id
+        schema:
+          type: integer
+          format: int64
+        in: path
+        required: true
+        deprecated: false
+        explode: true
+      - name: style_ids
+        schema:
+          type: string
+        in: query
+        required: false
+        deprecated: false
+        explode: true
+      - name: page
+        schema:
+          type: integer
+          format: int32
+        in: query
+        required: false
+        deprecated: false
+        explode: true
+      - name: per_page
+        schema:
+          type: integer
+          format: int32
+        in: query
+        required: false
+        deprecated: false
+        explode: true
+      - name: Authorization
+        schema:
+          type: string
+        in: header
+        required: false
+        deprecated: false
+        explode: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/PaginatedArtistImages'
+        '500':
+          description: ''
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                type: string
+  /posts/count:
+    get:
+      parameters:
+      - name: styles
+        schema:
+          type: string
+        in: query
+        required: true
+        deprecated: false
+        explode: true
+      - name: states
+        schema:
+          type: string
+        in: query
+        required: false
+        deprecated: false
+        explode: true
+      - name: cities
+        schema:
+          type: string
+        in: query
+        required: false
+        deprecated: false
+        explode: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/PostsCount'
+        '500':
+          description: ''
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                type: string
+  /posts:
+    get:
+      parameters:
+      - name: styles
+        schema:
+          type: string
+        in: query
+        required: true
+        deprecated: false
+        explode: true
+      - name: states
+        schema:
+          type: string
+        in: query
+        required: false
+        deprecated: false
+        explode: true
+      - name: cities
+        schema:
+          type: string
+        in: query
+        required: false
+        deprecated: false
+        explode: true
+      - name: limit
+        schema:
+          type: integer
+          format: int64
+        in: query
+        required: false
+        deprecated: false
+        explode: true
+      - name: offset
+        schema:
+          type: integer
+          format: int64
+        in: query
+        required: false
+        deprecated: false
+        explode: true
+      - name: Authorization
+        schema:
+          type: string
+        in: header
+        required: false
+        deprecated: false
+        explode: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/PaginatedPosts'
         '500':
           description: ''
           content:
@@ -140,9 +659,159 @@ paths:
                 type: string
 components:
   schemas:
-    MapState:
+    ArtistData:
       type: object
-      title: MapState
+      title: ArtistData
+      required:
+      - id
+      - name
+      - is_subscribed
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        years_experience:
+          type: integer
+          format: int32
+        instagram_handle:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        is_subscribed:
+          type: boolean
+    ArtistImage:
+      type: object
+      title: ArtistImage
+      required:
+      - id
+      - url
+      - is_favorited
+      properties:
+        id:
+          type: integer
+          format: int64
+        url:
+          type: string
+        is_favorited:
+          type: boolean
+    ArtistLocation:
+      type: object
+      title: ArtistLocation
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        address:
+          type: string
+    ArtistStyle:
+      type: object
+      title: ArtistStyle
+      required:
+      - id
+      - name
+      - count
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        count:
+          type: integer
+          format: int64
+    ArtistWithDetails:
+      type: object
+      title: ArtistWithDetails
+      required:
+      - artist
+      - styles
+      properties:
+        artist:
+          $ref: '#/components/schemas/ArtistData'
+        location:
+          $ref: '#/components/schemas/ArtistLocation'
+        styles:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArtistStyle'
+    City:
+      type: object
+      title: City
+      required:
+      - name
+      - state
+      - lat
+      - long
+      properties:
+        name:
+          type: string
+        state:
+          type: string
+        lat:
+          type: number
+          format: double
+        long:
+          type: number
+          format: double
+    LocationWithDetails:
+      type: object
+      title: LocationWithDetails
+      required:
+      - id
+      - name
+      - lat
+      - long
+      - artist_count
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        lat:
+          type: number
+          format: double
+        long:
+          type: number
+          format: double
+        artist_count:
+          type: integer
+          format: int64
+    MapInfo:
+      type: object
+      title: MapInfo
+      required:
+      - stats
+      - shops
+      properties:
+        stats:
+          $ref: '#/components/schemas/MapStats'
+        shops:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShopWithDetails'
+    MapStats:
+      type: object
+      title: MapStats
       required:
       - shop_count
       - artist_count
@@ -155,6 +824,202 @@ components:
           type: integer
           format: int64
         style_count:
+          type: integer
+          format: int64
+    PaginatedArtistImages:
+      type: object
+      title: PaginatedArtistImages
+      required:
+      - images
+      - total
+      - page
+      - per_page
+      properties:
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArtistImage'
+        total:
+          type: integer
+          format: int64
+        page:
+          type: integer
+          format: int32
+        per_page:
+          type: integer
+          format: int32
+    PaginatedPosts:
+      type: object
+      title: PaginatedPosts
+      required:
+      - posts
+      - total
+      - limit
+      - offset
+      properties:
+        posts:
+          type: array
+          items:
+            $ref: '#/components/schemas/TattooPost'
+        total:
+          type: integer
+          format: int64
+        limit:
+          type: integer
+          format: int64
+        offset:
+          type: integer
+          format: int64
+    PaginatedShopImages:
+      type: object
+      title: PaginatedShopImages
+      required:
+      - images
+      - total
+      - page
+      - per_page
+      properties:
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShopImage'
+        total:
+          type: integer
+          format: int64
+        page:
+          type: integer
+          format: int32
+        per_page:
+          type: integer
+          format: int32
+    PostalCodeResult:
+      type: object
+      title: PostalCodeResult
+      required:
+      - lat
+      - long
+      properties:
+        lat:
+          type: number
+          format: double
+        long:
+          type: number
+          format: double
+        city:
+          type: string
+        state:
+          type: string
+    PostsCount:
+      type: object
+      title: PostsCount
+      required:
+      - count
+      properties:
+        count:
+          type: integer
+          format: int64
+    ShopArtist:
+      type: object
+      title: ShopArtist
+      required:
+      - id
+      - name
+      - styles
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        styles:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShopStyle'
+    ShopData:
+      type: object
+      title: ShopData
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postal_code:
+          type: string
+        website:
+          type: string
+        lat:
+          type: number
+          format: float
+        long:
+          type: number
+          format: float
+    ShopImage:
+      type: object
+      title: ShopImage
+      required:
+      - id
+      - url
+      - artist_id
+      - artist_name
+      - is_favorited
+      properties:
+        id:
+          type: integer
+          format: int64
+        url:
+          type: string
+        artist_id:
+          type: integer
+          format: int64
+        artist_name:
+          type: string
+        is_favorited:
+          type: boolean
+    ShopStyle:
+      type: object
+      title: ShopStyle
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    ShopWithDetails:
+      type: object
+      title: ShopWithDetails
+      required:
+      - shop
+      - artists
+      properties:
+        shop:
+          $ref: '#/components/schemas/ShopData'
+        artists:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShopArtist'
+    State:
+      type: object
+      title: State
+      required:
+      - name
+      - artist_count
+      properties:
+        name:
+          type: string
+        artist_count:
           type: integer
           format: int64
     StyleTypeWithCount:
@@ -192,3 +1057,34 @@ components:
         count:
           type: integer
           format: int64
+    TattooPost:
+      type: object
+      title: TattooPost
+      required:
+      - id
+      - url
+      - artist_id
+      - artist_name
+      - is_favorited
+      properties:
+        id:
+          type: integer
+          format: int64
+        url:
+          type: string
+        artist_id:
+          type: integer
+          format: int64
+        artist_name:
+          type: string
+        location_id:
+          type: integer
+          format: int64
+        location_name:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        is_favorited:
+          type: boolean

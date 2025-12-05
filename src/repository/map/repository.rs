@@ -1,10 +1,11 @@
 use sea_orm::{DatabaseConnection, DbErr, FromQueryResult, Statement};
 
 use crate::repository::map::types::{
-    City, GeoBoundary, LocationWithDetails, MapState, PostalCodeResult, State,
+    City, GeoBoundary, LocationWithDetails, MapStats, PostalCodeResult, State,
 };
 
 pub struct MapRepository {
+    #[allow(dead_code)]
     db: DatabaseConnection,
 }
 
@@ -13,10 +14,11 @@ impl MapRepository {
         Self { db }
     }
 
+    #[allow(dead_code)]
     pub async fn get_map_state_for_bounds(
         &self,
-        boundary: GeoBoundary,
-    ) -> Result<Option<MapState>, DbErr> {
+        boundary: &GeoBoundary,
+    ) -> Result<Option<MapStats>, DbErr> {
         let GeoBoundary {
             south_west_lat,
             north_east_lat,
@@ -24,7 +26,7 @@ impl MapRepository {
             north_east_long,
         } = boundary;
 
-        MapState::find_by_statement(Statement::from_sql_and_values(
+        MapStats::find_by_statement(Statement::from_sql_and_values(
             sea_orm::DatabaseBackend::Postgres,
             r#"
                 ;WITH artists_in_bounds AS (
@@ -45,10 +47,10 @@ impl MapRepository {
                 LEFT JOIN artists_images_styles ais ON ai.id = ais.artists_images_id
             "#,
             [
-                south_west_lat.into(),
-                north_east_lat.into(),
-                south_west_long.into(),
-                north_east_long.into(),
+                (*south_west_lat).into(),
+                (*north_east_lat).into(),
+                (*south_west_long).into(),
+                (*north_east_long).into(),
             ],
         ))
         .one(&self.db)

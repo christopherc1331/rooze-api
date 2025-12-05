@@ -1,6 +1,6 @@
 mod artist;
 mod health;
-mod map;
+pub mod map;
 mod posts;
 mod shop;
 mod styles;

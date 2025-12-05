@@ -10,28 +10,27 @@ pub struct ShopData {
     pub state: Option<String>,
     pub postal_code: Option<String>,
     pub website: Option<String>,
-    pub lat: Option<f64>,
-    pub long: Option<f64>,
+    pub lat: Option<f32>,
+    pub long: Option<f32>,
 }
 
 #[derive(Debug, Object)]
 pub struct ShopWithDetails {
     pub shop: ShopData,
     pub artists: Vec<ShopArtist>,
-    pub styles: Vec<ShopStyle>,
 }
 
-#[derive(Debug, FromQueryResult, Object)]
+#[derive(Debug, Object)]
 pub struct ShopArtist {
     pub id: i64,
     pub name: String,
+    pub styles: Vec<ShopStyle>,
 }
 
-#[derive(Debug, FromQueryResult, Object)]
+#[derive(Debug, Clone, FromQueryResult, Object)]
 pub struct ShopStyle {
     pub id: i64,
     pub name: String,
-    pub count: i64,
 }
 
 #[derive(Debug, Object)]

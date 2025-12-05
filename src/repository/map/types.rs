@@ -2,12 +2,13 @@ use poem_openapi::Object;
 use sea_orm::FromQueryResult;
 
 #[derive(Debug, FromQueryResult, Object)]
-pub struct MapState {
+pub struct MapStats {
     pub shop_count: i64,
     pub artist_count: i64,
     pub style_count: i64,
 }
 
+#[derive(Debug, Clone, Copy)]
 pub struct GeoBoundary {
     pub north_east_lat: f64,
     pub north_east_long: f64,

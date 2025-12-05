@@ -1,14 +1,17 @@
 use poem_openapi::{
-    OpenApi,
+    Object, OpenApi,
     param::{Path, Query},
     payload::Json,
 };
 
 use crate::{
     error::ErrorResponse,
-    repository::map::{
-        MapRepository,
-        types::{City, LocationWithDetails, MapState, PostalCodeResult, State},
+    repository::{
+        map::{
+            MapRepository,
+            types::{City, LocationWithDetails, MapStats, PostalCodeResult, State},
+        },
+        shop::{ShopRepository, types::ShopWithDetails},
     },
     service::MapService,
 };
@@ -17,35 +20,48 @@ pub struct MapApi {
     service: MapService,
 }
 
+#[derive(Debug, Object)]
+pub struct MapInfo {
+    pub stats: MapStats,
+    pub shops: Vec<ShopWithDetails>,
+}
+
 #[OpenApi(prefix_path = "/map")]
 impl MapApi {
     pub fn new(state: std::sync::Arc<crate::AppState>) -> Self {
-        let repo = MapRepository::new(state.db.clone());
-        let service = MapService::new(repo);
+        let map_repo = MapRepository::new(state.db.clone());
+        let shop_repo = ShopRepository::new(state.db.clone());
+        let service = MapService::new(map_repo, shop_repo);
         Self { service }
     }
 
     #[oai(path = "/", method = "get")]
-    async fn get_map_state_for_bounds(
+    async fn get_map_info_for_bounds(
         &self,
         south_west_lat: Query<f64>,
         north_east_lat: Query<f64>,
         south_west_long: Query<f64>,
         north_east_long: Query<f64>,
-    ) -> Result<Json<Option<MapState>>, ErrorResponse> {
+        style_ids: Query<Option<String>>,
+    ) -> Result<Json<MapInfo>, ErrorResponse> {
         let boundary = crate::repository::map::types::GeoBoundary {
             south_west_lat: south_west_lat.0,
             north_east_lat: north_east_lat.0,
             south_west_long: south_west_long.0,
             north_east_long: north_east_long.0,
         };
-        let map_state = self
+        let style_ids_parsed = style_ids.0.map(|s| {
+            s.split(',')
+                .filter_map(|id| id.trim().parse::<i64>().ok())
+                .collect()
+        });
+        let map_info = self
             .service
-            .get_map_state_in_bounds(boundary)
+            .get_map_info(boundary, style_ids_parsed)
             .await
             .map_err(ErrorResponse::from)?;
 
-        Ok(Json(map_state))
+        Ok(Json(map_info))
     }
 
     #[oai(path = "/cities", method = "get")]
