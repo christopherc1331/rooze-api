@@ -25,7 +25,6 @@ impl MapApi {
         Self { service }
     }
 
-    /// Get map statistics (shop/artist/style counts) for a geographic boundary
     #[oai(path = "/", method = "get")]
     async fn get_map_state_for_bounds(
         &self,
@@ -49,7 +48,6 @@ impl MapApi {
         Ok(Json(map_state))
     }
 
-    /// Get cities for a given state
     #[oai(path = "/cities", method = "get")]
     async fn get_cities(&self, state: Query<String>) -> Result<Json<Vec<City>>, ErrorResponse> {
         let cities = self
@@ -60,7 +58,6 @@ impl MapApi {
         Ok(Json(cities))
     }
 
-    /// Get all states with artist counts
     #[oai(path = "/states", method = "get")]
     async fn get_states(&self) -> Result<Json<Vec<State>>, ErrorResponse> {
         let states = self
@@ -71,7 +68,6 @@ impl MapApi {
         Ok(Json(states))
     }
 
-    /// Get locations with details within bounds, with optional filtering
     #[oai(path = "/locations", method = "get")]
     #[allow(clippy::too_many_arguments)]
     async fn get_locations(
@@ -115,7 +111,6 @@ impl MapApi {
         Ok(Json(locations))
     }
 
-    /// Search for coordinates by postal code
     #[oai(path = "/postal_code/:code", method = "get")]
     async fn search_postal_code(
         &self,

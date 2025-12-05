@@ -25,7 +25,6 @@ impl ShopApi {
         Self { service }
     }
 
-    /// Get shop/location data with all artists and styles
     #[oai(path = "/:id", method = "get")]
     async fn get_shop(
         &self,
@@ -45,7 +44,6 @@ impl ShopApi {
         Ok(Json(shop))
     }
 
-    /// Get styles filtered by selected styles (co-occurrence) for a shop
     #[oai(path = "/:id/styles", method = "get")]
     async fn get_shop_filtered_styles(
         &self,
@@ -65,7 +63,6 @@ impl ShopApi {
         Ok(Json(styles))
     }
 
-    /// Get paginated images for a shop with optional style filtering
     #[oai(path = "/:id/images", method = "get")]
     async fn get_shop_images(
         &self,

@@ -54,7 +54,6 @@ impl StylesApi {
         Ok(Json(styles))
     }
 
-    /// Get all styles with artist counts, grouped by type
     #[oai(path = "/all", method = "get")]
     async fn get_all_styles(
         &self,
@@ -74,7 +73,6 @@ impl StylesApi {
         Ok(Json(styles))
     }
 
-    /// Get styles that co-occur with selected styles (for filtering)
     #[oai(path = "/filtered", method = "get")]
     async fn get_filtered_styles(
         &self,

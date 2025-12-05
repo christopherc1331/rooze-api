@@ -25,7 +25,6 @@ impl PostsApi {
         Self { service }
     }
 
-    /// Get count of tattoo posts matching filters
     #[oai(path = "/count", method = "get")]
     async fn get_posts_count(
         &self,
@@ -59,7 +58,6 @@ impl PostsApi {
         Ok(Json(count))
     }
 
-    /// Get paginated tattoo posts filtered by style, state, and city
     #[oai(path = "/", method = "get")]
     async fn get_posts(
         &self,

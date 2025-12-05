@@ -25,7 +25,6 @@ impl ArtistApi {
         Self { service }
     }
 
-    /// Get artist profile with location and styles
     #[oai(path = "/:id", method = "get")]
     async fn get_artist(
         &self,
@@ -39,7 +38,6 @@ impl ArtistApi {
         Ok(Json(artist))
     }
 
-    /// Get styles filtered by selected styles (co-occurrence) for an artist
     #[oai(path = "/:id/styles", method = "get")]
     async fn get_artist_filtered_styles(
         &self,
@@ -59,7 +57,6 @@ impl ArtistApi {
         Ok(Json(styles))
     }
 
-    /// Get paginated images for an artist with optional style filtering
     #[oai(path = "/:id/images", method = "get")]
     async fn get_artist_images(
         &self,
