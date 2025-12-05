@@ -73,6 +73,7 @@ impl MapApi {
 
     /// Get locations with details within bounds, with optional filtering
     #[oai(path = "/locations", method = "get")]
+    #[allow(clippy::too_many_arguments)]
     async fn get_locations(
         &self,
         south_west_lat: Query<f64>,
