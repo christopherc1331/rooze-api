@@ -72,6 +72,22 @@ impl ShopRepository {
                         WHERE ais.style_id = ANY($5)
                         GROUP BY ai.id, ai.artist_id
                         HAVING COUNT(DISTINCT ais.style_id) = {}
+                    ),
+                    artist_style_counts AS (
+                        SELECT
+                            ai.artist_id,
+                            ais.style_id,
+                            COUNT(*) as image_count,
+                            ROW_NUMBER() OVER (PARTITION BY ai.artist_id ORDER BY COUNT(*) DESC) as rn
+                        FROM artists_images ai
+                        INNER JOIN artists_images_styles ais ON ai.id = ais.artists_images_id
+                        WHERE ai.active IS NOT FALSE
+                        GROUP BY ai.artist_id, ais.style_id
+                    ),
+                    top_styles AS (
+                        SELECT artist_id, style_id, image_count
+                        FROM artist_style_counts
+                        WHERE rn <= 5
                     )
                     SELECT
                         l.id as location_id,
@@ -90,9 +106,8 @@ impl ShopRepository {
                     FROM locations_in_bounds l
                     INNER JOIN artists a ON a.location_id = l.id
                     INNER JOIN matching_artists ma ON a.id = ma.artist_id
-                    LEFT JOIN artists_images ai ON a.id = ai.artist_id AND ai.active IS NOT FALSE
-                    LEFT JOIN artists_images_styles ais ON ai.id = ais.artists_images_id
-                    LEFT JOIN styles s ON ais.style_id = s.id
+                    LEFT JOIN top_styles ts ON a.id = ts.artist_id
+                    LEFT JOIN styles s ON ts.style_id = s.id
                 "#,
                     ids.len()
                 ),
@@ -111,6 +126,22 @@ impl ShopRepository {
                         FROM locations
                         WHERE lat BETWEEN $1 AND $2
                         AND long BETWEEN $3 AND $4
+                    ),
+                    artist_style_counts AS (
+                        SELECT
+                            ai.artist_id,
+                            ais.style_id,
+                            COUNT(*) as image_count,
+                            ROW_NUMBER() OVER (PARTITION BY ai.artist_id ORDER BY COUNT(*) DESC) as rn
+                        FROM artists_images ai
+                        INNER JOIN artists_images_styles ais ON ai.id = ais.artists_images_id
+                        WHERE ai.active IS NOT FALSE
+                        GROUP BY ai.artist_id, ais.style_id
+                    ),
+                    top_styles AS (
+                        SELECT artist_id, style_id, image_count
+                        FROM artist_style_counts
+                        WHERE rn <= 5
                     )
                     SELECT
                         l.id as location_id,
@@ -128,9 +159,8 @@ impl ShopRepository {
                         s.name as style_name
                     FROM locations_in_bounds l
                     INNER JOIN artists a ON a.location_id = l.id
-                    LEFT JOIN artists_images ai ON a.id = ai.artist_id AND ai.active IS NOT FALSE
-                    LEFT JOIN artists_images_styles ais ON ai.id = ais.artists_images_id
-                    LEFT JOIN styles s ON ais.style_id = s.id
+                    LEFT JOIN top_styles ts ON a.id = ts.artist_id
+                    LEFT JOIN styles s ON ts.style_id = s.id
                 "#
                 .to_string(),
                 vec![
