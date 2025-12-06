@@ -1,7 +1,7 @@
 use sea_orm::{DatabaseConnection, DbErr, FromQueryResult, Statement};
 
 use crate::repository::map::types::{
-    City, GeoBoundary, LocationWithDetails, MapStats, PostalCodeResult, State,
+    BoundingBox, City, GeoBoundary, LocationWithDetails, MapStats, PostalCodeResult, State,
 };
 
 pub struct MapRepository {
@@ -80,5 +80,48 @@ impl MapRepository {
         _postal_code: String,
     ) -> Result<Option<PostalCodeResult>, DbErr> {
         todo!()
+    }
+
+    pub async fn get_bounding_box_for_location(
+        &self,
+        city: Option<String>,
+        state: String,
+    ) -> Result<Option<BoundingBox>, DbErr> {
+        let (query, params): (&str, Vec<sea_orm::Value>) = match city {
+            Some(ref c) => (
+                r#"
+                    SELECT
+                        MAX(l.lat) as north_east_lat,
+                        MAX(l.long) as north_east_long,
+                        MIN(l.lat) as south_west_lat,
+                        MIN(l.long) as south_west_long
+                    FROM locations l
+                    INNER JOIN artists a ON a.location_id = l.id
+                    WHERE l.state = $1 AND l.city = $2
+                "#,
+                vec![state.clone().into(), c.clone().into()],
+            ),
+            None => (
+                r#"
+                    SELECT
+                        MAX(l.lat) as north_east_lat,
+                        MAX(l.long) as north_east_long,
+                        MIN(l.lat) as south_west_lat,
+                        MIN(l.long) as south_west_long
+                    FROM locations l
+                    INNER JOIN artists a ON a.location_id = l.id
+                    WHERE l.state = $1
+                "#,
+                vec![state.into()],
+            ),
+        };
+
+        BoundingBox::find_by_statement(Statement::from_sql_and_values(
+            sea_orm::DatabaseBackend::Postgres,
+            query,
+            params,
+        ))
+        .one(&self.db)
+        .await
     }
 }

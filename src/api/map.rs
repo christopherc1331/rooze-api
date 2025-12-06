@@ -9,7 +9,7 @@ use crate::{
     repository::{
         map::{
             MapRepository,
-            types::{City, LocationWithDetails, MapStats, PostalCodeResult, State},
+            types::{BoundingBox, City, LocationWithDetails, MapStats, PostalCodeResult, State},
         },
         shop::{ShopRepository, types::ShopWithDetails},
     },
@@ -135,6 +135,20 @@ impl MapApi {
         let result = self
             .service
             .search_by_postal_code(code.0)
+            .await
+            .map_err(ErrorResponse::from)?;
+        Ok(Json(result))
+    }
+
+    #[oai(path = "/bounds", method = "get")]
+    async fn get_bounding_box(
+        &self,
+        state: Query<String>,
+        city: Query<Option<String>>,
+    ) -> Result<Json<Option<BoundingBox>>, ErrorResponse> {
+        let result = self
+            .service
+            .get_bounding_box(city.0, state.0)
             .await
             .map_err(ErrorResponse::from)?;
         Ok(Json(result))

@@ -49,3 +49,11 @@ pub struct PostalCodeResult {
     pub city: Option<String>,
     pub state: Option<String>,
 }
+
+#[derive(Debug, FromQueryResult, Object)]
+pub struct BoundingBox {
+    pub north_east_lat: f32,
+    pub north_east_long: f32,
+    pub south_west_lat: f32,
+    pub south_west_long: f32,
+}

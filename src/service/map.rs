@@ -81,4 +81,15 @@ impl MapService {
     ) -> Result<Option<crate::repository::map::types::PostalCodeResult>, AppError> {
         Ok(self.map_repo.search_by_postal_code(postal_code).await?)
     }
+
+    pub async fn get_bounding_box(
+        &self,
+        city: Option<String>,
+        state: String,
+    ) -> Result<Option<crate::repository::map::types::BoundingBox>, AppError> {
+        Ok(self
+            .map_repo
+            .get_bounding_box_for_location(city, state)
+            .await?)
+    }
 }
