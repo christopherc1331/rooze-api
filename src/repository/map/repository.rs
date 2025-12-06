@@ -124,4 +124,26 @@ impl MapRepository {
         .one(&self.db)
         .await
     }
+
+    pub async fn get_bounding_box_for_postal_code(
+        &self,
+        postal_code: String,
+    ) -> Result<Option<BoundingBox>, DbErr> {
+        BoundingBox::find_by_statement(Statement::from_sql_and_values(
+            sea_orm::DatabaseBackend::Postgres,
+            r#"
+                SELECT
+                    MAX(l.lat) as north_east_lat,
+                    MAX(l.long) as north_east_long,
+                    MIN(l.lat) as south_west_lat,
+                    MIN(l.long) as south_west_long
+                FROM locations l
+                INNER JOIN artists a ON a.location_id = l.id
+                WHERE l.postal_code = $1
+            "#,
+            [postal_code.into()],
+        ))
+        .one(&self.db)
+        .await
+    }
 }

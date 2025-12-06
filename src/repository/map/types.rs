@@ -52,8 +52,8 @@ pub struct PostalCodeResult {
 
 #[derive(Debug, FromQueryResult, Object)]
 pub struct BoundingBox {
-    pub north_east_lat: f32,
-    pub north_east_long: f32,
-    pub south_west_lat: f32,
-    pub south_west_long: f32,
+    pub north_east_lat: Option<f32>,
+    pub north_east_long: Option<f32>,
+    pub south_west_lat: Option<f32>,
+    pub south_west_long: Option<f32>,
 }

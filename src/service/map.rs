@@ -92,4 +92,14 @@ impl MapService {
             .get_bounding_box_for_location(city, state)
             .await?)
     }
+
+    pub async fn get_bounding_box_by_postal_code(
+        &self,
+        postal_code: String,
+    ) -> Result<Option<crate::repository::map::types::BoundingBox>, AppError> {
+        Ok(self
+            .map_repo
+            .get_bounding_box_for_postal_code(postal_code)
+            .await?)
+    }
 }

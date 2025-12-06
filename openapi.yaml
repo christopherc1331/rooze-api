@@ -361,6 +361,29 @@ paths:
             text/plain; charset=utf-8:
               schema:
                 type: string
+  /map/bounds/postal_code/{code}:
+    get:
+      parameters:
+      - name: code
+        schema:
+          type: string
+        in: path
+        required: true
+        deprecated: false
+        explode: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/BoundingBox'
+        '500':
+          description: ''
+          content:
+            text/plain; charset=utf-8:
+              schema:
+                type: string
   /shops/{id}:
     get:
       parameters:
@@ -780,11 +803,6 @@ components:
     BoundingBox:
       type: object
       title: BoundingBox
-      required:
-      - north_east_lat
-      - north_east_long
-      - south_west_lat
-      - south_west_long
       properties:
         north_east_lat:
           type: number

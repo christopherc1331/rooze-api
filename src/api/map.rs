@@ -153,4 +153,17 @@ impl MapApi {
             .map_err(ErrorResponse::from)?;
         Ok(Json(result))
     }
+
+    #[oai(path = "/bounds/postal_code/:code", method = "get")]
+    async fn get_bounding_box_by_postal_code(
+        &self,
+        code: Path<String>,
+    ) -> Result<Json<Option<BoundingBox>>, ErrorResponse> {
+        let result = self
+            .service
+            .get_bounding_box_by_postal_code(code.0)
+            .await
+            .map_err(ErrorResponse::from)?;
+        Ok(Json(result))
+    }
 }
